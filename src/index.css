@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scrollbar-custom {
+  scrollbar-width: thin;          /* Firefox */
+  scrollbar-color: #153d5d transparent; /* Firefox thumb/track */
+  overflow-y: auto;
+}
+
+/* Chrome, Edge, Safari */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: #153d5d;
+  border-radius: 9999px;
+  opacity: 0; /* hide by default */
+  transition: opacity 0.3s;
+}
+
+.scrollbar-custom:hover::-webkit-scrollbar-thumb {
+  opacity: 1; /* show when hovering */
+}
+
+html, body, #root {
+  height: 100%;
+}
