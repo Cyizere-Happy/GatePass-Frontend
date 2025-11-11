@@ -56,7 +56,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between gap-8 mb-8">
         {/* Text Section */}
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-2" style={{ color: '#153d5d' }}>Gate<span className='text-black'>Pass.</span> Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: '#153d5d' }}>Gate<span className='text-black' style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>Pass.</span> Dashboard</h1>
           <p className="text-gray-600 text-lg">
             Monitor parent visits and student interactions at your school
           </p>

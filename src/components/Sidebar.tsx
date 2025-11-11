@@ -30,7 +30,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col justify-between relative overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-[#153d5d]">Gate<span className='text-black'>Pass.</span></h1>
+        <h1 className="text-2xl font-bold text-[#153d5d]">Gate<span className='text-black' style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}>Pass.</span></h1>
         <p className="text-xs text-gray-500 mt-1">School Dashboard</p>
       </div>
 

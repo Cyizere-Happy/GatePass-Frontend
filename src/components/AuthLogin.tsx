@@ -45,6 +45,21 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
 
   return (
     <div className="fixed inset-0 w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden">
+      <h1
+  className={`absolute z-50 text-3xl font-bold mb-2 p-6 transition-all duration-1000`}
+  style={{
+    color: 'white', // the heading stays white for login
+    transform: isActive ? 'translateX(1080px)' : 'translateX(0px)', // moves right smoothly
+  }}
+>
+  Gate<span
+    className='text-black'
+    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}
+  >
+    Pass.
+  </span>
+</h1>
+
       <div className="w-full h-full flex items-center justify-center">
         <div className={`container-auth ${isActive ? 'active' : ''}`}>
           {/* Login Form */}
@@ -90,7 +105,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
           {/* Register Form */}
           <div className="form-box register" style={{backgroundColor: "#deeefa"}}>
             <div className="form-content">
-              <h1 className="text-4xl font-bold mb-8 text-gray-800">Register</h1>
+              <h1 className="text-3xl font-bold mb-8 text-gray-800">Register</h1>
               <div className="input-box">
                 <input
                   type="text"
@@ -133,11 +148,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
 
           {/* Animated Background - Left */}
           <div className="word-box">
-            <div className="word-content word-left">
+            <div className="word-content word-left" style={{ color: '#deeefa'}}>
               <div className="w-80 h-80 mx-auto">
                       <Lottie animationData={SignUp} loop={true} />
               </div>
-              <p className="mb-6">Don't have an account already?</p>
+              <p className="mb-6">“Don’t have an account yet? Create one now to join our community, unlock all features, and start enjoying a personalized experience tailored just for you.”</p>
               <button className="toggle-button" onClick={handleRegisterClick}>
                 Register
               </button>
@@ -146,12 +161,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
 
           {/* Animated Background - Right */}
           <div className="word-box">
-            <div className="word-content word-right">
+            <div className="word-content word-right" style={{ color: '#deeefa'}}>
               <div className="w-80 h-80 mx-auto">
                 <Lottie animationData={Login} loop={true} />
               </div>
-              <p className="mb-6">Already have an account?</p>
-              <button className="toggle-button" onClick={handleLoginClick}>
+              <p className="mb-6">“If you already have an account with us, please sign in here to continue enjoying all the features and access your personalized content.”</p>
+              <button className="toggle-button"  onClick={handleLoginClick}>
                 Login
               </button>
             </div>

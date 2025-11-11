@@ -6,7 +6,7 @@
           width: 100%;
           height: 100%;
           box-shadow: 0 10px 50px rgba(21, 61, 93, 0.3);
-          background-color: white;
+          background-color: #deeefa;
           overflow: hidden;
         }
 
@@ -14,7 +14,7 @@
           position: absolute;
           width: 50%;
           height: 100%;
-          background-color: white;
+          background-color: #deeefa;
           right: 0;
           display: flex;
           align-items: center;
@@ -193,8 +193,8 @@
           width: 180px;
           height: 50px;
           background-color: transparent;
-          border: 2px solid white;
-          color: white;
+          border: 2px solid #deeefa;
+          color: #deeefa;
           border-radius: 10px;
           cursor: pointer;
           font-size: 17px;
@@ -204,7 +204,7 @@
         }
 
         .toggle-button:hover {
-          background-color: white;
+          background-color: #deeefa;
           color: #153d5d;
           transform: translateY(-2px);
           box-shadow: 0 4px 15px rgba(255,255,255,0.3);
