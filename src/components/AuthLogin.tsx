@@ -152,7 +152,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
               <div className="w-80 h-80 mx-auto">
                       <Lottie animationData={SignUp} loop={true} />
               </div>
-              <p className="mb-6">“Don’t have an account yet? Create one now to join our community, unlock all features, and start enjoying a personalized experience tailored just for you.”</p>
+              <p className="mb-6">Don’t have an account yet? <b>Create one now!</b></p>
               <button className="toggle-button" onClick={handleRegisterClick}>
                 Register
               </button>
@@ -165,7 +165,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
               <div className="w-80 h-80 mx-auto">
                 <Lottie animationData={Login} loop={true} />
               </div>
-              <p className="mb-6">“If you already have an account with us, please sign in here to continue enjoying all the features and access your personalized content.”</p>
+              <p className="mb-6">If you already have an account with us, <br /> <b>Please sign in here to continue</b></p>
               <button className="toggle-button"  onClick={handleLoginClick}>
                 Login
               </button>
