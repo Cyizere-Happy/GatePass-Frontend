@@ -5,13 +5,13 @@ import Login from "../Assets/login.json";
 import './AuthStyles.css';
 
 interface AuthFormProps {
-  onLogin: (username: string) => void;
+  onLogin: (schoolName: string) => void;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
   const [isActive, setIsActive] = useState(false);
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
-  const [registerData, setRegisterData] = useState({ username: '', email: '', password: '' });
+  const [loginData, setLoginData] = useState({ schoolName: '', password: '' });
+  const [registerData, setRegisterData] = useState({ schoolName: '', email: '', password: '' });
 
   const handleRegisterClick = () => {
     setIsActive(true);
@@ -24,20 +24,20 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
   const handleLoginSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     
-    if (loginData.username && loginData.password) {
+    if (loginData.schoolName && loginData.password) {
       console.log('Login submitted:', loginData);
-      onLogin(loginData.username);
+      onLogin(loginData.schoolName);
     } else {
-      alert('Please enter username and password');
+      alert('Please enter School Name and password');
     }
   };
 
   const handleRegisterSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     
-    if (registerData.username && registerData.email && registerData.password) {
+    if (registerData.schoolName && registerData.email && registerData.password) {
       console.log('Register submitted:', registerData);
-      onLogin(registerData.username);
+      onLogin(registerData.schoolName);
     } else {
       alert('Please fill in all fields');
     }
@@ -69,9 +69,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
               <div className="input-box">
                 <input
                   type="text"
-                  placeholder="Username"
-                  value={loginData.username}
-                  onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                  placeholder="School Name"
+                  value={loginData.schoolName}
+                  onChange={(e) => setLoginData({ ...loginData, schoolName: e.target.value })}
                 />
                 <i className="bx bxs-user"></i>
               </div>
@@ -109,16 +109,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ onLogin }) => {
               <div className="input-box">
                 <input
                   type="text"
-                  placeholder="Username"
-                  value={registerData.username}
-                  onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
+                  placeholder="School Name"
+                  value={registerData.schoolName}
+                  onChange={(e) => setRegisterData({ ...registerData, schoolName: e.target.value })}
                 />
                 <i className="bx bxs-user"></i>
               </div>
               <div className="input-box">
                 <input
                   type="email"
-                  placeholder="Email"
+                  placeholder="School Email"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
                 />

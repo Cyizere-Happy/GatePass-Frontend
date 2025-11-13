@@ -11,7 +11,7 @@ import AuthForm from './components/AuthLogin';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('dashboard');
-  const [isAuthenticated, setIsAuthenticated] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
   const handleLogin = (username: string) => {
