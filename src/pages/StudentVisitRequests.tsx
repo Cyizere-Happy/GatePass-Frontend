@@ -45,34 +45,34 @@ export default function StudentVisitRequests() {
   // Mock data
   useEffect(() => {
     const mockStudents: StudentVisitStatus[] = [
-      // {
-      //   student: { id: '1', name: 'John Smith', grade: 'Grade 5', class: 'A', guardianName: 'Mary Smith' },
-      //   visitCount: 3,
-      //   needsVisit: true,
-      //   priority: 'high',
-      //   lastVisitDate: '2025-10-15'
-      // },
-      // {
-      //   student: { id: '2', name: 'Emma Johnson', grade: 'Grade 4', class: 'B', guardianName: 'Robert Johnson' },
-      //   visitCount: 1,
-      //   needsVisit: true,
-      //   priority: 'medium',
-      //   lastVisitDate: '2025-10-28'
-      // },
-      // {
-      //   student: { id: '3', name: 'Michael Brown', grade: 'Grade 6', class: 'A', guardianName: 'Sarah Brown' },
-      //   visitCount: 5,
-      //   needsVisit: false,
-      //   priority: 'low',
-      //   lastVisitDate: '2025-11-05'
-      // },
-      // {
-      //   student: { id: '4', name: 'Sophia Davis', grade: 'Grade 3', class: 'C', guardianName: 'James Davis' },
-      //   visitCount: 2,
-      //   needsVisit: true,
-      //   priority: 'high',
-      //   lastVisitDate: '2025-10-10'
-      // }
+      {
+        student: { id: '1', name: 'John Smith', grade: 'Grade 5', class: 'A', guardianName: 'Mary Smith' },
+        visitCount: 3,
+        needsVisit: true,
+        priority: 'high',
+        lastVisitDate: '2025-10-15'
+      },
+      {
+        student: { id: '2', name: 'Emma Johnson', grade: 'Grade 4', class: 'B', guardianName: 'Robert Johnson' },
+        visitCount: 1,
+        needsVisit: true,
+        priority: 'medium',
+        lastVisitDate: '2025-10-28'
+      },
+      {
+        student: { id: '3', name: 'Michael Brown', grade: 'Grade 6', class: 'A', guardianName: 'Sarah Brown' },
+        visitCount: 5,
+        needsVisit: false,
+        priority: 'low',
+        lastVisitDate: '2025-11-05'
+      },
+      {
+        student: { id: '4', name: 'Sophia Davis', grade: 'Grade 3', class: 'C', guardianName: 'James Davis' },
+        visitCount: 2,
+        needsVisit: true,
+        priority: 'high',
+        lastVisitDate: '2025-10-10'
+      }
     ];
     setStudentVisitStatus(mockStudents);
   }, []);
