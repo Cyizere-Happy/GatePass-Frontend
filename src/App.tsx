@@ -3,10 +3,10 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import StudentVisitRequests from './pages/StudentVisitRequests';
 import Verification from './pages/Verification';
-import Students from './pages/Students';
 import VisitingDays from './pages/VisitingDays';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import OutsideVisitors from './pages/OutsideVisitors.tsx';
 import AuthForm from './components/AuthLogin'; 
 
 function App() {
@@ -33,8 +33,8 @@ function App() {
         return <StudentVisitRequests />;
       case 'verification':
         return <Verification />;
-      case 'students':
-        return <Students />;
+      case 'outside-visitors':
+        return <OutsideVisitors />;
       case 'visiting-days':
         return <VisitingDays />;
       case 'reports':

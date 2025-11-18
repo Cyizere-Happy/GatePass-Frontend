@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Calendar, Plus, Clock, Users, MapPin, Edit, XCircle, Filter, Download, Settings } from 'lucide-react';
 import Lottie from "lottie-react";
 import animationData from "../Assets/Logo.json";
+import { apiService } from '../services/api';
 
 interface VisitingDay {
   id: string;
@@ -14,19 +15,35 @@ interface VisitingDay {
   currentVisitors: number;
   status: 'scheduled' | 'active' | 'completed' | 'cancelled';
   createdAt: string;
+  audience: 'parents' | 'outside_visitors';
 }
 
 export default function VisitingDays() {
   const [visitingDays, setVisitingDays] = useState<VisitingDay[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [showVisitModal, setShowVisitModal] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<VisitingDay | null>(null);
+  const [visitType, setVisitType] = useState<'parent' | 'outside_visitor'>('parent');
+  const [newVisit, setNewVisit] = useState({
+    parentName: '',
+    studentName: '',
+    studentClass: '',
+    visitorOrganization: '',
+    visitDepartment: '',
+    contactNumber: '',
+    purpose: '',
+    visitDate: '',
+    visitTime: ''
+  });
   const [newVisitingDay, setNewVisitingDay] = useState({
     date: '',
     startTime: '',
     endTime: '',
     location: '',
     description: '',
-    maxVisitors: 50
+    maxVisitors: 50,
+    audience: 'parents' as 'parents' | 'outside_visitors'
   });
 
   useEffect(() => {
@@ -41,7 +58,8 @@ export default function VisitingDays() {
         maxVisitors: 100,
         currentVisitors: 75,
         status: 'scheduled',
-        createdAt: '2024-01-01'
+        createdAt: '2024-01-01',
+        audience: 'parents'
       },
       {
         id: '2',
@@ -53,7 +71,8 @@ export default function VisitingDays() {
         maxVisitors: 50,
         currentVisitors: 50,
         status: 'active',
-        createdAt: '2024-01-05'
+        createdAt: '2024-01-05',
+        audience: 'parents'
       },
       {
         id: '3',
@@ -65,7 +84,8 @@ export default function VisitingDays() {
         maxVisitors: 80,
         currentVisitors: 45,
         status: 'scheduled',
-        createdAt: '2024-01-10'
+        createdAt: '2024-01-10',
+        audience: 'outside_visitors'
       },
       {
         id: '4',
@@ -77,7 +97,8 @@ export default function VisitingDays() {
         maxVisitors: 200,
         currentVisitors: 200,
         status: 'completed',
-        createdAt: '2024-12-01'
+        createdAt: '2024-12-01',
+        audience: 'outside_visitors'
       },
       {
         id: '5',
@@ -89,7 +110,8 @@ export default function VisitingDays() {
         maxVisitors: 60,
         currentVisitors: 15,
         status: 'scheduled',
-        createdAt: '2024-01-15'
+        createdAt: '2024-01-15',
+        audience: 'parents'
       }
     ];
     setVisitingDays(mockVisitingDays);
@@ -143,6 +165,61 @@ export default function VisitingDays() {
   const totalVisitors = visitingDays.reduce((sum, d) => sum + d.currentVisitors, 0);
   const activeDays = visitingDays.filter(d => d.status === 'active').length;
   const avgCapacity = totalDays ? Math.round(visitingDays.reduce((sum, d) => sum + (d.currentVisitors / d.maxVisitors) * 100, 0) / totalDays) : 0;
+
+  const openVisitModal = (day: VisitingDay) => {
+    setSelectedDay(day);
+    setVisitType(day.audience === 'outside_visitors' ? 'outside_visitor' : 'parent');
+    setNewVisit({
+      parentName: '',
+      studentName: '',
+      studentClass: '',
+      visitorOrganization: '',
+      visitDepartment: '',
+      contactNumber: '',
+      purpose: '',
+      visitDate: day.date,
+      visitTime: ''
+    });
+    setShowVisitModal(true);
+  };
+
+  const handleSaveVisit = async () => {
+    if (!newVisit.visitDate || !newVisit.visitTime || !newVisit.purpose) {
+      alert('Please fill in the required fields: purpose, date and time.');
+      return;
+    }
+
+    try {
+      if (visitType === 'parent') {
+        await apiService.createVisit({
+          visitorType: 'parent',
+          parentName: newVisit.parentName,
+          parentPhone: newVisit.contactNumber,
+          visitDate: newVisit.visitDate,
+          visitTime: newVisit.visitTime,
+          purpose: newVisit.purpose,
+          studentId: '',
+          studentName: `${newVisit.studentName} (${newVisit.studentClass})`
+        });
+      } else {
+        await apiService.createVisit({
+          visitorType: 'outside_visitor',
+          parentName: newVisit.parentName,
+          parentPhone: newVisit.contactNumber,
+          visitDate: newVisit.visitDate,
+          visitTime: newVisit.visitTime,
+          purpose: newVisit.purpose,
+          visitorOrganization: newVisit.visitorOrganization,
+          visitDepartment: newVisit.visitDepartment
+        });
+      }
+
+      setShowVisitModal(false);
+    } catch (error) {
+      console.error('Failed to save visit:', error);
+      alert('Failed to save visit. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen text-sm">
@@ -210,6 +287,7 @@ export default function VisitingDays() {
                 <th className="px-3 py-2 text-left">Date</th>
                 <th className="px-3 py-2 text-left">Time</th>
                 <th className="px-3 py-2 text-left">Location</th>
+                <th className="px-3 py-2 text-left">For</th>
                 <th className="px-3 py-2 text-left">Visitors</th>
                 <th className="px-3 py-2 text-left">Capacity</th>
                 <th className="px-3 py-2 text-left">Status</th>
@@ -224,6 +302,9 @@ export default function VisitingDays() {
                   <td className="px-3 py-2.5">{new Date(day.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</td>
                   <td className="px-3 py-2.5">{day.startTime} - {day.endTime}</td>
                   <td className="px-3 py-2.5">{day.location}</td>
+                  <td className="px-3 py-2.5">
+                    {day.audience === 'parents' ? 'Parents / Guardians' : 'Outside Visitors'}
+                  </td>
                   <td className="px-3 py-2.5">{day.currentVisitors}</td>
                   <td className={`px-3 py-2.5 font-medium ${getCapacityColor(day.currentVisitors, day.maxVisitors)}`}>
                     {Math.round((day.currentVisitors / day.maxVisitors) * 100)}%
@@ -234,9 +315,17 @@ export default function VisitingDays() {
                     </span>
                   </td>
                   <td className="px-3 py-2.5">
-                    <button className="text-gray-400 hover:text-gray-600">
-                      <Edit className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button className="text-gray-400 hover:text-gray-600">
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        className="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50"
+                        onClick={() => openVisitModal(day)}
+                      >
+                        Register Visit
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -286,6 +375,37 @@ export default function VisitingDays() {
                   <input type="date" value={newVisitingDay.date} onChange={e => setNewVisitingDay(prev => ({ ...prev, date: e.target.value }))} className="w-full px-3 py-1.5 border rounded text-xs" />
                 </div>
                 <div>
+                  <label className="block text-xs font-semibold mb-1">Visit Type <span className="text-red-500">*</span></label>
+                  <div className="inline-flex rounded-full border border-gray-200 bg-gray-50 p-0.5 text-[10px]">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewVisitingDay(prev => ({ ...prev, audience: 'parents' }))
+                      }
+                      className={`px-3 py-1 rounded-full font-medium ${
+                        newVisitingDay.audience === 'parents'
+                          ? 'bg-white text-[#153d5d] shadow-sm'
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      Parent Visits
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewVisitingDay(prev => ({ ...prev, audience: 'outside_visitors' }))
+                      }
+                      className={`px-3 py-1 rounded-full font-medium ${
+                        newVisitingDay.audience === 'outside_visitors'
+                          ? 'bg-white text-[#153d5d] shadow-sm'
+                          : 'text-gray-500'
+                      }`}
+                    >
+                      Outside Visitors
+                    </button>
+                  </div>
+                </div>
+                <div>
                   <label className="block text-xs font-semibold mb-1">Location <span className="text-red-500">*</span></label>
                   <input type="text" value={newVisitingDay.location} onChange={e => setNewVisitingDay(prev => ({ ...prev, location: e.target.value }))} placeholder="Auditorium" className="w-full px-3 py-1.5 border rounded text-xs" />
                 </div>
@@ -311,6 +431,231 @@ export default function VisitingDays() {
             <div className="border-t px-4 py-3 flex gap-2">
               <button onClick={() => setShowCreateModal(false)} className="flex-1 px-3 py-1.5 border rounded text-gray-700 hover:bg-gray-50 text-xs font-medium">Cancel</button>
               <button onClick={handleCreateVisitingDay} className="flex-1 px-3 py-1.5 text-white rounded text-xs font-medium" style={{ backgroundColor: '#153d5d' }}>Schedule</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Register Visit Modal */}
+      {showVisitModal && selectedDay && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="bg-blue-50 px-6 py-4 flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-bold" style={{ color: '#153d5d' }}>
+                  Register Visit
+                </h3>
+                <p className="text-xs mt-1 text-gray-600">
+                  Visiting day: {new Date(selectedDay.date).toLocaleDateString('en-GB')} ·{' '}
+                  {selectedDay.startTime} - {selectedDay.endTime}
+                </p>
+              </div>
+              <button
+                onClick={() => setShowVisitModal(false)}
+                className="hover:opacity-70"
+              >
+                <XCircle className="w-5 h-5" style={{ color: '#153d5d' }} />
+              </button>
+            </div>
+
+            <div className="px-6 pt-4">
+              <label className="block text-xs font-semibold mb-1">
+                Visit Type <span className="text-red-500">*</span>
+              </label>
+              <div className="inline-flex rounded-full border border-gray-200 bg-gray-50 p-0.5 text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => setVisitType('parent')}
+                  className={`px-3 py-1 rounded-full font-medium ${
+                    visitType === 'parent'
+                      ? 'bg-white text-[#153d5d] shadow-sm'
+                      : 'text-gray-500'
+                  }`}
+                >
+                  Parent Visit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setVisitType('outside_visitor')}
+                  className={`px-3 py-1 rounded-full font-medium ${
+                    visitType === 'outside_visitor'
+                      ? 'bg-white text-[#153d5d] shadow-sm'
+                      : 'text-gray-500'
+                  }`}
+                >
+                  Outside Visitor
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4 text-xs">
+              {visitType === 'parent' ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold mb-1">Parent / Guardian Name</label>
+                      <input
+                        type="text"
+                        value={newVisit.parentName}
+                        onChange={e =>
+                          setNewVisit(prev => ({ ...prev, parentName: e.target.value }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-1">Student Name</label>
+                      <input
+                        type="text"
+                        value={newVisit.studentName}
+                        onChange={e =>
+                          setNewVisit(prev => ({ ...prev, studentName: e.target.value }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold mb-1">Class</label>
+                      <input
+                        type="text"
+                        value={newVisit.studentClass}
+                        onChange={e =>
+                          setNewVisit(prev => ({ ...prev, studentClass: e.target.value }))
+                        }
+                        placeholder="e.g. Grade 5 A"
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-1">Purpose</label>
+                      <input
+                        type="text"
+                        value={newVisit.purpose}
+                        onChange={e =>
+                          setNewVisit(prev => ({ ...prev, purpose: e.target.value }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold mb-1">Visitor Name</label>
+                      <input
+                        type="text"
+                        value={newVisit.parentName}
+                        onChange={e =>
+                          setNewVisit(prev => ({ ...prev, parentName: e.target.value }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-1">Organization</label>
+                      <input
+                        type="text"
+                        value={newVisit.visitorOrganization}
+                        onChange={e =>
+                          setNewVisit(prev => ({
+                            ...prev,
+                            visitorOrganization: e.target.value
+                          }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold mb-1">
+                        Department / Person Visited
+                      </label>
+                      <input
+                        type="text"
+                        value={newVisit.visitDepartment}
+                        onChange={e =>
+                          setNewVisit(prev => ({
+                            ...prev,
+                            visitDepartment: e.target.value
+                          }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-1">Contact Number</label>
+                      <input
+                        type="tel"
+                        value={newVisit.contactNumber}
+                        onChange={e =>
+                          setNewVisit(prev => ({
+                            ...prev,
+                            contactNumber: e.target.value
+                          }))
+                        }
+                        className="w-full px-3 py-1.5 border rounded"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1">Purpose</label>
+                    <input
+                      type="text"
+                      value={newVisit.purpose}
+                      onChange={e =>
+                        setNewVisit(prev => ({ ...prev, purpose: e.target.value }))
+                      }
+                      className="w-full px-3 py-1.5 border rounded"
+                    />
+                  </div>
+                </>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold mb-1">Visit Date</label>
+                  <input
+                    type="date"
+                    value={newVisit.visitDate}
+                    onChange={e =>
+                      setNewVisit(prev => ({ ...prev, visitDate: e.target.value }))
+                    }
+                    className="w-full px-3 py-1.5 border rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold mb-1">Visit Time</label>
+                  <input
+                    type="time"
+                    value={newVisit.visitTime}
+                    onChange={e =>
+                      setNewVisit(prev => ({ ...prev, visitTime: e.target.value }))
+                    }
+                    className="w-full px-3 py-1.5 border rounded"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t px-6 py-4 flex gap-2">
+              <button
+                onClick={() => setShowVisitModal(false)}
+                className="flex-1 px-3 py-1.5 border rounded text-gray-700 hover:bg-gray-50 text-xs font-medium"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveVisit}
+                className="flex-1 px-3 py-1.5 text-white rounded text-xs font-medium"
+                style={{ backgroundColor: '#153d5d' }}
+              >
+                Save Visit
+              </button>
             </div>
           </div>
         </div>

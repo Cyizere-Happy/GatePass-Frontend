@@ -9,6 +9,7 @@ import { Navigation, Pagination } from "swiper/modules"; // Import modules
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "./swiperCustom.css"
 
 interface Student {
   id: string;

@@ -1,4 +1,12 @@
-import type { Visit, Student, Transaction, DashboardStats, VisitingDay } from '../types';
+import type {
+  Visit,
+  Student,
+  Transaction,
+  DashboardStats,
+  VisitingDay,
+  VisitorMember,
+  VisitDocument
+} from '../types';
 
 
 const mockStudents: Student[] = [
@@ -40,6 +48,37 @@ const mockStudents: Student[] = [
   },
 ];
 
+const mockVisitorMembers = {
+  bk: [
+    { id: 'bk-01', name: 'Ange Uwase', role: 'Partnership Lead', contact: '+250 788 123 000' },
+    { id: 'bk-02', name: 'Eric Habimana', role: 'Account Manager', contact: '+250 788 555 222' },
+    { id: 'bk-03', name: 'Divine Umutesi', role: 'Brand Specialist', contact: '+250 788 987 321' }
+  ] as VisitorMember[],
+  rdb: [
+    { id: 'rdb-01', name: 'Jean Bosco', role: 'Tourism Liaison', contact: '+250 789 000 444' },
+    { id: 'rdb-02', name: 'Diane Mugabo', role: 'Innovation Lead', contact: '+250 789 111 555' }
+  ] as VisitorMember[],
+  supplier: [
+    { id: 'sup-01', name: 'John Visitor', role: 'Operations Lead', contact: '+250 788 999 000' },
+    { id: 'sup-02', name: 'Grace Mukamana', role: 'Technical Specialist', contact: '+250 788 111 222' }
+  ] as VisitorMember[]
+};
+
+const mockVisitDocuments: VisitDocument[] = [
+  {
+    id: 'doc-1',
+    title: 'BK Partnership Brief',
+    url: '#',
+    type: 'other'
+  },
+  {
+    id: 'doc-2',
+    title: 'Visitor IDs',
+    url: '#',
+    type: 'id'
+  }
+];
+
 const mockVisits: Visit[] = [
   {
     id: '1',
@@ -55,7 +94,8 @@ const mockVisits: Visit[] = [
     paymentAmount: 1000,
     transactionId: 'txn_001',
     createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T11:00:00Z'
+    updatedAt: '2024-01-15T11:00:00Z',
+    visitorType: 'parent'
   },
   {
     id: '2',
@@ -71,7 +111,98 @@ const mockVisits: Visit[] = [
     paymentAmount: 1000,
     transactionId: 'txn_002',
     createdAt: '2024-01-16T14:00:00Z',
-    updatedAt: '2024-01-16T14:00:00Z'
+    updatedAt: '2024-01-16T14:00:00Z',
+    visitorType: 'parent'
+  },
+  {
+    id: '3',
+    studentId: '',
+    studentName: '-',
+    parentName: 'Ange Uwase',
+    parentPhone: '+250 788 123 000',
+    visitDate: '2024-02-10',
+    visitTime: '09:30',
+    purpose: 'BK Partnership Review',
+    status: 'completed',
+    paymentStatus: 'completed',
+    paymentAmount: 0,
+    transactionId: 'txn_ext_001',
+    createdAt: '2024-02-10T09:30:00Z',
+    updatedAt: '2024-02-10T11:00:00Z',
+    visitorType: 'outside_visitor',
+    visitorOrganization: 'Bank of Kigali (BK)',
+    visitorMembers: mockVisitorMembers.bk,
+    visitNotes: 'Discussed bank-led STEM initiatives and on-campus kiosk.',
+    documents: mockVisitDocuments
+  },
+  {
+    id: '4',
+    studentId: '',
+    studentName: '-',
+    parentName: 'Jean Bosco',
+    parentPhone: '+250 789 000 444',
+    visitDate: '2024-02-25',
+    visitTime: '15:00',
+    purpose: 'RDB Innovation Tour',
+    status: 'completed',
+    paymentStatus: 'completed',
+    paymentAmount: 0,
+    transactionId: 'txn_ext_002',
+    createdAt: '2024-02-25T15:00:00Z',
+    updatedAt: '2024-02-25T17:30:00Z',
+    visitorType: 'outside_visitor',
+    visitorOrganization: 'Rwanda Development Board',
+    visitorMembers: mockVisitorMembers.rdb,
+    visitNotes: 'Showcased smart gate solution and student projects.',
+    documents: [
+      {
+        id: 'doc-3',
+        title: 'RDB Visitor List',
+        url: '#',
+        type: 'other'
+      }
+    ]
+  },
+  {
+    id: '5',
+    studentId: '',
+    studentName: '-',
+    parentName: 'Ange Uwase',
+    parentPhone: '+250 788 123 000',
+    visitDate: '2024-03-15',
+    visitTime: '10:00',
+    purpose: 'BK STEM Lab Launch Prep',
+    status: 'approved',
+    paymentStatus: 'completed',
+    paymentAmount: 0,
+    transactionId: 'txn_ext_003',
+    createdAt: '2024-03-15T10:00:00Z',
+    visitorType: 'outside_visitor',
+    visitorOrganization: 'Bank of Kigali (BK)',
+    visitorMembers: mockVisitorMembers.bk,
+    visitNotes: 'Walkthrough of final lab setup and sponsorship signage.',
+    documents: mockVisitDocuments
+  },
+  {
+    id: '6',
+    studentId: '',
+    studentName: '-',
+    parentName: 'John Visitor',
+    parentPhone: '+250 788 999 000',
+    visitDate: '2024-01-18',
+    visitTime: '09:30',
+    purpose: 'Security system installation review',
+    status: 'completed',
+    paymentStatus: 'completed',
+    paymentAmount: 0,
+    transactionId: 'txn_ext_004',
+    createdAt: '2024-01-18T09:30:00Z',
+    updatedAt: '2024-01-18T10:30:00Z',
+    visitorType: 'outside_visitor',
+    visitorOrganization: 'SecureTech Suppliers',
+    visitorMembers: mockVisitorMembers.supplier,
+    visitNotes: 'Reviewed gate scanner deployment timeline.',
+    visitDepartment: 'Infrastructure & Security'
   }
 ];
 
@@ -125,6 +256,7 @@ export const apiService = {
     status?: string;
     date?: string;
     search?: string;
+    visitorType?: 'parent' | 'outside_visitor';
     page?: number;
     limit?: number;
   }): Promise<{ visits: Visit[]; total: number }> {
@@ -139,7 +271,14 @@ export const apiService = {
       const searchTerm = params.search.toLowerCase();
       filteredVisits = filteredVisits.filter(visit => 
         visit.parentName.toLowerCase().includes(searchTerm) ||
-        visit.purpose.toLowerCase().includes(searchTerm)
+        visit.purpose.toLowerCase().includes(searchTerm) ||
+        (visit.visitorOrganization?.toLowerCase().includes(searchTerm) ?? false)
+      );
+    }
+
+    if (params?.visitorType) {
+      filteredVisits = filteredVisits.filter(
+        visit => visit.visitorType === params.visitorType
       );
     }
     
@@ -190,6 +329,14 @@ export const apiService = {
     visit.status = 'cancelled';
     visit.updatedAt = new Date().toISOString();
     return visit;
+  },
+
+  async getVisitorHistory(organization: string): Promise<Visit[]> {
+    await delay(250);
+    const org = organization.toLowerCase();
+    return mockVisits.filter(
+      visit => visit.visitorOrganization?.toLowerCase() === org
+    );
   },
 
   async getStudents(params?: {
@@ -246,6 +393,43 @@ export const apiService = {
     // Create a simple text blob for demo
     const content = `Report: ${type}\nFormat: ${format}\nGenerated: ${new Date().toISOString()}`;
     return new Blob([content], { type: 'text/plain' });
+  },
+
+  async createVisit(data: {
+    visitorType: 'parent' | 'outside_visitor';
+    parentName: string;
+    parentPhone: string;
+    visitDate: string;
+    visitTime: string;
+    purpose: string;
+    studentId?: string;
+    studentName?: string;
+    visitorOrganization?: string;
+    visitDepartment?: string;
+  }): Promise<Visit> {
+    await delay(300);
+
+    const base: Visit = {
+      id: (mockVisits.length + 1).toString(),
+      parentName: data.parentName,
+      parentPhone: data.parentPhone,
+      studentId: data.studentId || '',
+      studentName: data.studentName || '-',
+      visitDate: data.visitDate,
+      visitTime: data.visitTime,
+      purpose: data.purpose,
+      status: 'pending',
+      paymentStatus: 'pending',
+      paymentAmount: 0,
+      transactionId: `txn_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      visitorType: data.visitorType,
+      visitorOrganization: data.visitorOrganization,
+      visitDepartment: data.visitDepartment
+    };
+
+    mockVisits.push(base);
+    return base;
   },
 
   // Visiting Days API

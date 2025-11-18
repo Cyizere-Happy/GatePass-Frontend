@@ -1,0 +1,54 @@
+.student-swiper {
+  --swiper-theme-color: #153d5d;
+  position: relative;
+  padding: 2rem 0;
+}
+
+/* --- Navigation Arrows --- */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #153d5d;
+  background: #ffffff;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  box-shadow: 0 4px 10px rgba(21, 61, 93, 0.25);
+  padding: 4px;
+  transition: all 0.3s ease;
+  top: 50%; /* centers vertically */
+  transform: translateY(-50%); /* perfect vertical centering */
+}
+
+/* Adjust hover look */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  background: #153d5d;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(21, 61, 93, 0.35);
+}
+
+/* Smaller arrow icons */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* --- Pagination Dots --- */
+.swiper-pagination-bullet {
+  background: #153d5d;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+/* Optional: slightly move arrows outward */
+.swiper-button-prev {
+  /* left: -20px; */
+}
+.swiper-button-next {
+  /* right: -20px; */
+}

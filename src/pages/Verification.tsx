@@ -182,13 +182,13 @@ export default function Verification() {
         <div className="flex items-center gap-4">
           <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
             canCheckIn ? 'bg-green-600' :
-            visit.status === 'completed' ? 'bg-blue-600' :
+            visit.status === 'completed' ? 'bg-[#153d5d]' :
             'bg-yellow-600'
           }`}>
             {canCheckIn ? (
               <UserCheck className="w-8 h-8 text-white" />
             ) : visit.status === 'completed' ? (
-              <CheckCircle className="w-8 h-8 text-white" />
+              <CheckCircle className="w-8 h-8 text-white bg-[#153d5d]" />
             ) : (
               <Clock className="w-8 h-8 text-white" />
             )}

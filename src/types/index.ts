@@ -13,7 +13,30 @@ export interface Visit {
   transactionId: string;
   createdAt: string;
   updatedAt?: string;
+  visitorType?: 'parent' | 'outside_visitor';
+  visitorOrganization?: string;
+  visitorMembers?: VisitorMember[];
+  visitNotes?: string;
+  documents?: VisitDocument[];
+   // Optional extra categorisation for outside visitors (e.g. which department/person they visited)
+  visitDepartment?: string;
   checkedInAt?: string;
+}
+
+export interface VisitorMember {
+  id: string;
+  name: string;
+  role: string;
+  contact: string;
+  identification?: string;
+  notes?: string;
+}
+
+export interface VisitDocument {
+  id: string;
+  title: string;
+  url: string;
+  type: 'id' | 'ticket' | 'other';
 }
 
 export interface Student {
@@ -81,4 +104,5 @@ export interface VisitingDay {
   status: 'scheduled' | 'active' | 'completed' | 'cancelled';
   notes?: string;
   createdAt: string;
+  audience?: 'parents' | 'outside_visitors';
 }

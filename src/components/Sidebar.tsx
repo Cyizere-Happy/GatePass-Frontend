@@ -5,8 +5,7 @@ import {
   Calendar,
   FileText,
   Settings,
-  LogOut,
-  GraduationCap
+  LogOut
 } from 'lucide-react';
 
 
@@ -20,7 +19,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'student-visits', label: 'Student Visits', icon: CalendarCheck },
     { id: 'verification', label: 'Verification', icon: Users },
-    { id: 'students', label: 'Students', icon: GraduationCap },
+    { id: 'outside-visitors', label: 'Outside Visitors', icon: Users },
     { id: 'visiting-days', label: 'Visiting Days', icon: Calendar },
     { id: 'reports', label: 'Reports', icon: FileText },
     { id: 'settings', label: 'Settings', icon: Settings },
