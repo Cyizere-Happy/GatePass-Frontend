@@ -57,7 +57,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           </div>
         ) : (
           <div className="mx-auto">
-            <div className="text-2xl font-black text-[#153d5d] tracking-tighter">GP.</div>
+            <div className="text-2xl font-black text-[#153d5d] tracking-tighter">G<span className='text-black font-black'>P.</span></div>
           </div>
         )}
       </div>
